@@ -12,6 +12,9 @@ namespace MineSweeper
 {
     public partial class Form1 : Form
     {
+
+        private int score = 0;
+        private PictureBox[] tiles = new PictureBox[100];
         public Form1()
         {
             InitializeComponent();
@@ -36,31 +39,31 @@ namespace MineSweeper
             {
                 int num = rand.Next(0, 2);
 
-                tile[i] = new PictureBox();
+                tiles[i] = new PictureBox();
 
-                tile[i].Height = 40;
-                tile[i].Width = 40;
-                tile[i].Left = x;
-                tile[i].Top = y;
-                tile[i].BorderStyle = BorderStyle.FixedSingle;
-                tile[i].Image = imageList1.Images[2];
+                tiles[i].Height = 40;
+                tiles[i].Width = 40;
+                tiles[i].Left = x;
+                tiles[i].Top = y;
+                tiles[i].BorderStyle = BorderStyle.FixedSingle;
+                tiles[i].Image = imageList1.Images[2];
                
 
                 if (num == 0)
                 {
-                    tile[i].Tag = "bomb";
+                    tiles[i].Tag = "bomb";
                 }
                 else
                 {
-                    tile[i].Tag = "ok";
+                    tiles[i].Tag = "ok";
                 }
 
-                tile[i].SizeMode = PictureBoxSizeMode.StretchImage;
+                tiles[i].SizeMode = PictureBoxSizeMode.StretchImage;
                
 
-                tile[i].Click += new EventHandler(ClickTile);
+                tiles[i].Click += new EventHandler(ClickTile);
 
-                panel1.Controls.Add(tile[i]);
+                panel1.Controls.Add(tiles[i]);
 
                 x += 40;
                 cnt++;
@@ -76,8 +79,36 @@ namespace MineSweeper
 
         private void ClickTile(object sender, EventArgs e)
         {
+            DialogResult ans;
             PictureBox tile = (PictureBox)sender;
-            MessageBox.Show(tile.Tag.ToString());
+           
+            if(tile.Tag.ToString() == "bomb")
+            {
+                tile.Image = imageList1.Images[0];
+                ans = MessageBox.Show("Game Over.\nScore: " + score+"\nPlay Again?", "Game Over", 
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (ans == DialogResult.Yes)
+                {
+                    score = 0;
+                    lblScore.Text = "0";
+                    foreach(PictureBox it in tiles)
+                    {
+                        panel1.Controls.Remove(it);
+                    }
+                    load_tiles();
+                }
+                else
+                {
+                    Application.Exit();
+                }
+            }
+            else if (tile.Tag.ToString() == "ok")
+            {
+                tile.Image= imageList1.Images[1];
+                score += 5;
+                lblScore.Text = score.ToString();
+            }
         }
     }
 }
