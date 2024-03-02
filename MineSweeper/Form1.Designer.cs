@@ -68,8 +68,9 @@
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "bomb.png");
-            this.imageList1.Images.SetKeyName(1, "flag.png");
+            this.imageList1.Images.SetKeyName(1, "ok.png");
             this.imageList1.Images.SetKeyName(2, "tile.png");
+            this.imageList1.Images.SetKeyName(3, "flag.png");
             // 
             // Form1
             // 
