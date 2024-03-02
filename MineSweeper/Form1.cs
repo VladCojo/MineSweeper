@@ -39,6 +39,8 @@ namespace MineSweeper
                 tile[i].Width = 40;
                 tile[i].Left = x;
                 tile[i].Top = y;
+                tile[i].Image = imageList1.Images[2];
+                tile[i].SizeMode = PictureBoxSizeMode.StretchImage;
 
                 tile[i].BorderStyle = BorderStyle.FixedSingle;
                 panel1.Controls.Add(tile[i]);
