@@ -13,7 +13,7 @@ namespace MineSweeper
 {
     public partial class Form1 : Form
     {
-
+        // MAI TREBUIE SA ADAUGI NIVELE DE DIFICULTATE + RECURSIVITATE PENTRU PATRATELE GOALE
         private static int ROW = 10;
         private static int COL = 10;
         private Button[,] tiles = new Button[ROW, COL];
@@ -34,10 +34,10 @@ namespace MineSweeper
             placeBombs();
 
             //Delet this after verifying that the win condition works
-            for (int i = 0; i < ROW; i++)
+            /*for (int i = 0; i < ROW; i++)
                 for (int j = 0; j < COL; j++)
                     if (hasBomb[i, j])
-                        tiles[i, j].Text = "💣";
+                        tiles[i, j].Text = "💣";*/
         }
 
         private void ClickTile(object sender, EventArgs e)
