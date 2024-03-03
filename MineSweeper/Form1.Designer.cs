@@ -35,6 +35,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.btnReset = new System.Windows.Forms.Button();
+            this.btnFlagMode = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // panel1
@@ -83,11 +84,23 @@
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
+            // btnFlagMode
+            // 
+            this.btnFlagMode.ForeColor = System.Drawing.Color.IndianRed;
+            this.btnFlagMode.Location = new System.Drawing.Point(573, 25);
+            this.btnFlagMode.Name = "btnFlagMode";
+            this.btnFlagMode.Size = new System.Drawing.Size(132, 41);
+            this.btnFlagMode.TabIndex = 4;
+            this.btnFlagMode.Text = "Flag Mode OFF";
+            this.btnFlagMode.UseVisualStyleBackColor = true;
+            this.btnFlagMode.Click += new System.EventHandler(this.btnFlagMode_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(717, 671);
+            this.Controls.Add(this.btnFlagMode);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblScore);
@@ -108,6 +121,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Button btnReset;
+        private System.Windows.Forms.Button btnFlagMode;
     }
 }
 

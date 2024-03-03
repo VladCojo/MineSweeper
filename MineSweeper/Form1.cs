@@ -18,7 +18,7 @@ namespace MineSweeper
         private static int COL = 10;
         private Button[,] tiles = new Button[ROW, COL];
         private bool [,] hasBomb = new bool[ROW, COL];
-
+        private bool flagMode = false;
 
 
         private static int NUM_BOMBS = 10;
@@ -32,20 +32,70 @@ namespace MineSweeper
             load_tiles();
             placeBombs();
         }
+
+        private void ClickTile(object sender, EventArgs e)
+        {
+            Color customColor = Color.FromArgb(208, 208, 208);
+            Button clickedButton = (Button)sender;
+            Tuple<int, int> indeces = (Tuple<int, int>)clickedButton.Tag;
+
+            int clickedRow = indeces.Item1;
+            int clickedCol = indeces.Item2;
+
+            if (!flagMode)
+            {
+                if (hasBomb[clickedRow, clickedCol])
+                {
+
+                    clickedButton.Text = "💣";
+                    DialogResult result = MessageBox.Show("Oops, you clicked on a bomb!\nPlay Again?",
+                                                           "", MessageBoxButtons.YesNo);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        Reset();
+                    }
+                    else
+                    {
+                        Application.Exit();
+                    }
+
+                }
+                else
+                {
+                    clickedButton.BackColor = customColor;
+                    checkForBombsAround(clickedRow, clickedCol, clickedButton);
+
+                }
+            } else if (flagMode)
+            {
+                ToggleFlag(clickedButton);
+            }
+            
+            
+        }
+
         private void btnReset_Click(object sender, EventArgs e)
+        {
+            Reset();
+        }
+
+        private void Reset()
         {
             for (int i = 0; i < ROW; i++)
                 for (int j = 0; j < COL; j++)
                 {
                     tiles[i, j].Text = "";
-                    tiles[i, j].BackColor = Color.White;//SystemColors.Control;
+                    tiles[i, j].ForeColor = Color.Black;
+                    tiles[i, j].BackColor = Color.White;
                     hasBomb[i, j] = false;
-                    
+
                 }
-            
-            
+
+
             placeBombs();
         }
+
 
         private void load_tiles()
         {
@@ -64,6 +114,7 @@ namespace MineSweeper
                     tiles[i, j].Width = 40;
                     tiles[i, j].Left = x;
                     tiles[i, j].Top = y;
+                    tiles[i, j].Text = "";
                     tiles[i, j].Click += new EventHandler(ClickTile);
                     // to optimize the search for bombs
                     tiles[i, j].Tag = new Tuple<int, int>(i, j);
@@ -181,31 +232,24 @@ namespace MineSweeper
             }
         }
 
-        private void ClickTile(object sender, EventArgs e)
+        private void ToggleFlag(Button btn)
         {
-            Color customColor = Color.FromArgb(208, 208, 208);
-            Button clickedButton = (Button)sender;
-            Tuple<int, int> indeces = (Tuple<int, int>)clickedButton.Tag;
-
-            int clickedRow = indeces.Item1;
-            int clickedCol = indeces.Item2;
-
-            if (hasBomb[clickedRow, clickedCol])
+            if (btn.Text == "")
             {
-                
-                clickedButton.Text = "X";
+                btn.Text = "F"; // Set flag
+                btn.ForeColor = Color.Red; // Change flag color
             }
-            else
+            else if (btn.Text == "F")
             {
-                clickedButton.BackColor = customColor;
-                checkForBombsAround(clickedRow, clickedCol, clickedButton);
-                
+                btn.Text = ""; // Remove flag
+                btn.ForeColor = Color.Black; // Restore button text color
             }
-            
-
-            
         }
 
-        
+        private void btnFlagMode_Click(object sender, EventArgs e)
+        {
+            flagMode = !flagMode;
+            btnFlagMode.Text = flagMode ? "Flag Mode ON" : "Flag Mode OFF";
+        }
     }
 }
