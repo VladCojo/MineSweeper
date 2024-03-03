@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,8 @@ namespace MineSweeper
         private Button[,] tiles = new Button[ROW, COL];
         private bool [,] hasBomb = new bool[ROW, COL];
 
+
+
         private static int NUM_BOMBS = 10;
         public Form1()
         {
@@ -27,6 +30,20 @@ namespace MineSweeper
         private void Form1_Load(object sender, EventArgs e)
         {  
             load_tiles();
+            placeBombs();
+        }
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < ROW; i++)
+                for (int j = 0; j < COL; j++)
+                {
+                    tiles[i, j].Text = "";
+                    tiles[i, j].BackColor = Color.White;//SystemColors.Control;
+                    hasBomb[i, j] = false;
+                    
+                }
+            
+            
             placeBombs();
         }
 
@@ -84,44 +101,89 @@ namespace MineSweeper
         {
             int bombs = 0;
 
-            if (hasBomb[row+1, col])
+            if (row + 1 < ROW && hasBomb[row + 1, col])
             {
                 bombs++;
             }
-            if (hasBomb[row+1, col-1])
+            if (row + 1 < ROW && col - 1 >= 0 && hasBomb[row + 1, col - 1])
             {
                 bombs++;
             }
-            if (hasBomb[row+1, col + 1])
+            if (row + 1 < ROW && col + 1 < COL && hasBomb[row + 1, col + 1])
             {
                 bombs++;
             }
-            if (hasBomb[row, col + 1])
+            if (col + 1 < COL && hasBomb[row, col + 1])
             {
                 bombs++;
             }
-            if (hasBomb[row, col - 1])
+            if (col - 1 >= 0 && hasBomb[row, col - 1])
             {
                 bombs++;
             }
-            if (hasBomb[row - 1, col])
+            if (row - 1 >= 0 && hasBomb[row - 1, col])
             {
                 bombs++;
             }
-            if (hasBomb[row - 1, col - 1])
+            if (row - 1 >= 0 && col - 1 >= 0 && hasBomb[row - 1, col - 1])
             {
                 bombs++;
             }
-            if (hasBomb[row - 1, col + 1])
+            if (row - 1 >= 0 && col + 1 < COL && hasBomb[row - 1, col + 1])
             {
                 bombs++;
             }
-            btn.Text = bombs.ToString();
 
+
+            writeToTile(bombs, btn);
+        }
+
+        private void writeToTile(int bombs, Button btn)
+        {
+            btn.Text = bombs.ToString();
+            btn.Font = new Font(btn.Font, FontStyle.Bold);
+
+            if(bombs == 0)
+            {
+                btn.Text = "";
+            } 
+            else if (bombs == 1)
+            {
+                btn.ForeColor = Color.Blue;
+            } 
+            else if (bombs == 2)
+            {
+                btn.ForeColor = Color.Green;
+            }
+            else if (bombs == 3)
+            {
+                btn.ForeColor = Color.Red;
+            }
+            else if (bombs == 4)
+            {
+                btn.ForeColor = Color.Yellow;
+            }
+            else if (bombs == 5)
+            {
+                btn.ForeColor = Color.Pink;
+            }
+            else if(bombs == 6)
+            {
+                btn.ForeColor = Color.Cyan;
+            }
+            else if (bombs == 7)
+            {
+                btn.ForeColor = Color.Magenta;
+            }
+            else if (bombs == 8)
+            {
+                btn.ForeColor = Color.Black;
+            }
         }
 
         private void ClickTile(object sender, EventArgs e)
         {
+            Color customColor = Color.FromArgb(208, 208, 208);
             Button clickedButton = (Button)sender;
             Tuple<int, int> indeces = (Tuple<int, int>)clickedButton.Tag;
 
@@ -135,6 +197,7 @@ namespace MineSweeper
             }
             else
             {
+                clickedButton.BackColor = customColor;
                 checkForBombsAround(clickedRow, clickedCol, clickedButton);
                 
             }
@@ -142,5 +205,7 @@ namespace MineSweeper
 
             
         }
+
+        
     }
 }

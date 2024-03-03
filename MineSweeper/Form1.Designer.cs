@@ -34,6 +34,7 @@
             this.lblScore = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.btnReset = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // panel1
@@ -72,11 +73,22 @@
             this.imageList1.Images.SetKeyName(2, "tile.png");
             this.imageList1.Images.SetKeyName(3, "flag.png");
             // 
+            // btnReset
+            // 
+            this.btnReset.Location = new System.Drawing.Point(247, 25);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(195, 23);
+            this.btnReset.TabIndex = 3;
+            this.btnReset.Text = "Reset";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(717, 671);
+            this.Controls.Add(this.btnReset);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblScore);
             this.Controls.Add(this.panel1);
@@ -95,6 +107,7 @@
         private System.Windows.Forms.Label lblScore;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.Button btnReset;
     }
 }
 
