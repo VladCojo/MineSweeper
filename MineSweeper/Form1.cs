@@ -80,6 +80,46 @@ namespace MineSweeper
             }
         }
 
+        private void checkForBombsAround(int row, int col, Button btn)
+        {
+            int bombs = 0;
+
+            if (hasBomb[row+1, col])
+            {
+                bombs++;
+            }
+            if (hasBomb[row+1, col-1])
+            {
+                bombs++;
+            }
+            if (hasBomb[row+1, col + 1])
+            {
+                bombs++;
+            }
+            if (hasBomb[row, col + 1])
+            {
+                bombs++;
+            }
+            if (hasBomb[row, col - 1])
+            {
+                bombs++;
+            }
+            if (hasBomb[row - 1, col])
+            {
+                bombs++;
+            }
+            if (hasBomb[row - 1, col - 1])
+            {
+                bombs++;
+            }
+            if (hasBomb[row - 1, col + 1])
+            {
+                bombs++;
+            }
+            btn.Text = bombs.ToString();
+
+        }
+
         private void ClickTile(object sender, EventArgs e)
         {
             Button clickedButton = (Button)sender;
@@ -90,12 +130,15 @@ namespace MineSweeper
 
             if (hasBomb[clickedRow, clickedCol])
             {
-                MessageBox.Show("OOPS YOU DIED");
+                
+                clickedButton.Text = "X";
             }
             else
             {
-                MessageBox.Show("nice");
+                checkForBombsAround(clickedRow, clickedCol, clickedButton);
+                
             }
+            
 
             
         }
