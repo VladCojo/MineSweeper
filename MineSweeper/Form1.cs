@@ -19,6 +19,7 @@ namespace MineSweeper
         private Button[,] tiles = new Button[ROW, COL];
         private bool [,] hasBomb = new bool[ROW, COL];
         private bool flagMode = false;
+        private int points = 0;
 
 
         private static int NUM_BOMBS = 10;
@@ -31,6 +32,12 @@ namespace MineSweeper
         {  
             load_tiles();
             placeBombs();
+
+            //Delet this after verifying that the win condition works
+            for (int i = 0; i < ROW; i++)
+                for (int j = 0; j < COL; j++)
+                    if (hasBomb[i, j])
+                        tiles[i, j].Text = "💣";
         }
 
         private void ClickTile(object sender, EventArgs e)
@@ -48,6 +55,10 @@ namespace MineSweeper
                 {
 
                     clickedButton.Text = "💣";
+                    for (int i = 0; i < ROW; i++)
+                        for (int j = 0; j < COL; j++)
+                            if (hasBomb[i, j])
+                                tiles[i, j].Text = "💣";
                     DialogResult result = MessageBox.Show("Oops, you clicked on a bomb!\nPlay Again?",
                                                            "", MessageBoxButtons.YesNo);
 
@@ -61,13 +72,35 @@ namespace MineSweeper
                     }
 
                 }
-                else
+                else if (clickedButton.BackColor != customColor)
                 {
+
+
                     clickedButton.BackColor = customColor;
                     checkForBombsAround(clickedRow, clickedCol, clickedButton);
+                    points++;
+                    lblScore.Text = points.ToString();
+                    if (points == ROW * COL - NUM_BOMBS)
+                    {
+                        DialogResult result = MessageBox.Show("YOU WON!\nPlay Again?",
+                                               "", MessageBoxButtons.YesNo);
+                        if (result == DialogResult.Yes)
+                        {
+                            Reset();
+                        }
+                        else
+                        {
+                            Application.Exit();
+                        }
+
+                    }
+
+
 
                 }
-            } else if (flagMode)
+                
+            } 
+            else if (flagMode)
             {
                 ToggleFlag(clickedButton);
             }
@@ -92,7 +125,8 @@ namespace MineSweeper
 
                 }
 
-
+            points = 0;
+            lblScore.Text = "0";
             placeBombs();
         }
 
@@ -236,13 +270,13 @@ namespace MineSweeper
         {
             if (btn.Text == "")
             {
-                btn.Text = "F"; // Set flag
-                btn.ForeColor = Color.Red; // Change flag color
+                btn.Text = "F"; 
+                btn.ForeColor = Color.Red; 
             }
             else if (btn.Text == "F")
             {
-                btn.Text = ""; // Remove flag
-                btn.ForeColor = Color.Black; // Restore button text color
+                btn.Text = ""; 
+                btn.ForeColor = Color.Black; 
             }
         }
 
