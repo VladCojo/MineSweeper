@@ -16,6 +16,9 @@ namespace MineSweeper
         private static int ROW = 10;
         private static int COL = 10;
         private Button[,] tiles = new Button[ROW, COL];
+        private bool [,] hasBomb = new bool[ROW, COL];
+
+        private static int NUM_BOMBS = 10;
         public Form1()
         {
             InitializeComponent();
@@ -24,7 +27,7 @@ namespace MineSweeper
         private void Form1_Load(object sender, EventArgs e)
         {  
             load_tiles();
-
+            placeBombs();
         }
 
         private void load_tiles()
@@ -45,6 +48,8 @@ namespace MineSweeper
                     tiles[i, j].Left = x;
                     tiles[i, j].Top = y;
                     tiles[i, j].Click += new EventHandler(ClickTile);
+                    // to optimize the search for bombs
+                    tiles[i, j].Tag = new Tuple<int, int>(i, j);
 
                     panel1.Controls.Add(tiles[i, j]);
 
@@ -56,9 +61,43 @@ namespace MineSweeper
             }
         }
 
+        private void placeBombs()
+        {
+            Random random = new Random();
+
+            int bombCount = 0;
+
+            while(bombCount < NUM_BOMBS)
+            {
+                int row = random.Next(ROW);
+                int col = random.Next(COL);
+
+                if (!hasBomb[row, col])
+                {
+                    hasBomb[row, col] = true;
+                    bombCount++;
+                }
+            }
+        }
+
         private void ClickTile(object sender, EventArgs e)
         {
-            MessageBox.Show("btn pressed");
+            Button clickedButton = (Button)sender;
+            Tuple<int, int> indeces = (Tuple<int, int>)clickedButton.Tag;
+
+            int clickedRow = indeces.Item1;
+            int clickedCol = indeces.Item2;
+
+            if (hasBomb[clickedRow, clickedCol])
+            {
+                MessageBox.Show("OOPS YOU DIED");
+            }
+            else
+            {
+                MessageBox.Show("nice");
+            }
+
+            
         }
     }
 }
