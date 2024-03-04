@@ -49,8 +49,11 @@ namespace MineSweeper
             int clickedRow = indeces.Item1;
             int clickedCol = indeces.Item2;
 
+            
             if (!flagMode)
             {
+                if (clickedButton.Text == "F")
+                    return;
                 if (hasBomb[clickedRow, clickedCol])
                 {
 
