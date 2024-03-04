@@ -307,8 +307,10 @@ namespace MineSweeper
                             neighborButton.BackColor = Color.FromArgb(208, 208, 208);
                             int adjacentBombs = CountAdjacentBombs(i, j);
                             writeToTile(adjacentBombs, neighborButton);
+                            points++;
                             if (adjacentBombs == 0)
                             {
+                                
                                 RevealEmptyNeighbors(i, j); // Recursively reveal neighboring tiles
                             }
                         }
