@@ -13,14 +13,14 @@ namespace MineSweeper
 {
     public partial class Form1 : Form
     {
-        // MAI TREBUIE SA ADAUGI NIVELE DE DIFICULTATE + RECURSIVITATE PENTRU PATRATELE GOALE
+        // MAI TREBUIE SA ADAUGI NIVELE DE DIFICULTATE
         private static int ROW = 10;
         private static int COL = 10;
         private Button[,] tiles = new Button[ROW, COL];
         private bool [,] hasBomb = new bool[ROW, COL];
         private bool flagMode = false;
         private int points = 0;
-
+        private Color customColor = Color.FromArgb(208, 208, 208);
 
         private static int NUM_BOMBS = 20;
         public Form1()
@@ -34,16 +34,16 @@ namespace MineSweeper
             placeBombs();
 
             //Delet this after verifying that the win condition works
-            for (int i = 0; i < ROW; i++)
+            /*for (int i = 0; i < ROW; i++)
                 for (int j = 0; j < COL; j++)
                     if (hasBomb[i, j])
-                        tiles[i, j].Text = "💣";
+                        tiles[i, j].Text = "💣";*/
         }
 
 
         private void ClickTile(object sender, EventArgs e)
         {
-            Color customColor = Color.FromArgb(208, 208, 208);
+            
             Button clickedButton = (Button)sender;
             Tuple<int, int> indeces = (Tuple<int, int>)clickedButton.Tag;
 
@@ -264,7 +264,7 @@ namespace MineSweeper
             btnFlagMode.Text = flagMode ? "Flag Mode ON" : "Flag Mode OFF";
         }
 
-        // TRY TO COMBINE CountAdjacentBombs with checkForBombsAround to make the code shorter
+        
         private int CountAdjacentBombs(int row, int col)
         {
             int bombs = 0;
@@ -302,9 +302,9 @@ namespace MineSweeper
                     if (i >= 0 && i < ROW && j >= 0 && j < COL && !(i == row && j == col))
                     {
                         Button neighborButton = tiles[i, j];
-                        if (neighborButton.BackColor != Color.FromArgb(208, 208, 208))
+                        if (neighborButton.BackColor != customColor)
                         {
-                            neighborButton.BackColor = Color.FromArgb(208, 208, 208);
+                            neighborButton.BackColor = customColor;
                             int adjacentBombs = CountAdjacentBombs(i, j);
                             writeToTile(adjacentBombs, neighborButton);
                             points++;
