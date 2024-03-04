@@ -22,7 +22,7 @@ namespace MineSweeper
         private int points = 0;
 
 
-        private static int NUM_BOMBS = 10;
+        private static int NUM_BOMBS = 20;
         public Form1()
         {
             InitializeComponent();
@@ -34,11 +34,12 @@ namespace MineSweeper
             placeBombs();
 
             //Delet this after verifying that the win condition works
-            /*for (int i = 0; i < ROW; i++)
+            for (int i = 0; i < ROW; i++)
                 for (int j = 0; j < COL; j++)
                     if (hasBomb[i, j])
-                        tiles[i, j].Text = "💣";*/
+                        tiles[i, j].Text = "💣";
         }
+
 
         private void ClickTile(object sender, EventArgs e)
         {
@@ -54,10 +55,13 @@ namespace MineSweeper
             {
                 if (clickedButton.Text == "F")
                     return;
+
                 if (hasBomb[clickedRow, clickedCol])
                 {
 
                     clickedButton.Text = "💣";
+
+                    // Reveal all the bombs
                     for (int i = 0; i < ROW; i++)
                         for (int j = 0; j < COL; j++)
                             if (hasBomb[i, j])
@@ -75,12 +79,23 @@ namespace MineSweeper
                     }
 
                 }
-                else if (clickedButton.BackColor != customColor)
+                else if (clickedButton.BackColor != customColor) // check that the button was not pressed prev
                 {
 
-
                     clickedButton.BackColor = customColor;
-                    checkForBombsAround(clickedRow, clickedCol, clickedButton);
+                    //checkForBombsAround(clickedRow, clickedCol, clickedButton);
+
+
+                    
+
+                    int adjacentBombs = CountAdjacentBombs(clickedRow, clickedCol);
+                    writeToTile(adjacentBombs, clickedButton);
+
+                    if(adjacentBombs == 0)
+                    {
+                        RevealEmptyNeighbors(clickedRow, clickedCol);
+                    }
+
                     points++;
                     lblScore.Text = points.ToString();
                     if (points == ROW * COL - NUM_BOMBS)
@@ -185,47 +200,7 @@ namespace MineSweeper
             }
         }
 
-        private void checkForBombsAround(int row, int col, Button btn)
-        {
-            int bombs = 0;
-
-            if (row + 1 < ROW && hasBomb[row + 1, col])
-            {
-                bombs++;
-            }
-            if (row + 1 < ROW && col - 1 >= 0 && hasBomb[row + 1, col - 1])
-            {
-                bombs++;
-            }
-            if (row + 1 < ROW && col + 1 < COL && hasBomb[row + 1, col + 1])
-            {
-                bombs++;
-            }
-            if (col + 1 < COL && hasBomb[row, col + 1])
-            {
-                bombs++;
-            }
-            if (col - 1 >= 0 && hasBomb[row, col - 1])
-            {
-                bombs++;
-            }
-            if (row - 1 >= 0 && hasBomb[row - 1, col])
-            {
-                bombs++;
-            }
-            if (row - 1 >= 0 && col - 1 >= 0 && hasBomb[row - 1, col - 1])
-            {
-                bombs++;
-            }
-            if (row - 1 >= 0 && col + 1 < COL && hasBomb[row - 1, col + 1])
-            {
-                bombs++;
-            }
-
-
-            writeToTile(bombs, btn);
-        }
-
+       
         private void writeToTile(int bombs, Button btn)
         {
             btn.Text = bombs.ToString();
@@ -287,6 +262,59 @@ namespace MineSweeper
         {
             flagMode = !flagMode;
             btnFlagMode.Text = flagMode ? "Flag Mode ON" : "Flag Mode OFF";
+        }
+
+        // TRY TO COMBINE CountAdjacentBombs with checkForBombsAround to make the code shorter
+        private int CountAdjacentBombs(int row, int col)
+        {
+            int bombs = 0;
+
+            // Loop through the adjacent tiles
+            for (int i = row - 1; i <= row + 1; i++)
+            {
+                for (int j = col - 1; j <= col + 1; j++)
+                {
+                    // Check if the current tile is within the grid boundaries
+                    if (i >= 0 && i < ROW && j >= 0 && j < COL)
+                    {
+                        // Skip the current tile itself
+                        if (!(i == row && j == col))
+                        {
+                            // If the current adjacent tile has a bomb, increment the bomb count
+                            if (hasBomb[i, j])
+                            {
+                                bombs++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return bombs;
+        }
+
+        private void RevealEmptyNeighbors(int row, int col)
+        {
+            for (int i = row - 1; i <= row + 1; i++)
+            {
+                for (int j = col - 1; j <= col + 1; j++)
+                {
+                    if (i >= 0 && i < ROW && j >= 0 && j < COL && !(i == row && j == col))
+                    {
+                        Button neighborButton = tiles[i, j];
+                        if (neighborButton.BackColor != Color.FromArgb(208, 208, 208))
+                        {
+                            neighborButton.BackColor = Color.FromArgb(208, 208, 208);
+                            int adjacentBombs = CountAdjacentBombs(i, j);
+                            writeToTile(adjacentBombs, neighborButton);
+                            if (adjacentBombs == 0)
+                            {
+                                RevealEmptyNeighbors(i, j); // Recursively reveal neighboring tiles
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
